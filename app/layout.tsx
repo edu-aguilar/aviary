@@ -19,9 +19,9 @@ export default async function RootLayout({
   
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={`flex flex-col ${inter.className}`}>
         <NavBar user={user}></NavBar>
-        <main>{children}</main>
+        <main className='p-6 grow'>{children}</main>
       </body>
     </html>
   )
