@@ -1,8 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { prisma } from "@/app/lib/prismadb";
-import { NextApiRequest } from "next";
 
 export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
@@ -29,13 +28,13 @@ export async function POST(request: Request) {
   });
 }
 
-export async function GET(request: NextApiRequest) {
+export async function GET(request: NextRequest) {
   const currentUser = await getCurrentUser();
   
   if (!currentUser) {
     return NextResponse.error();
   }
-
+  
   const pagination = getPagination(request);
 
   const birds = await prisma.bird.findMany({
@@ -48,13 +47,17 @@ export async function GET(request: NextApiRequest) {
   });
 }
 
-const getPagination = (request: NextApiRequest): { pageNumber: number, pageSize: number } => {
-  const { pageNumber, pageSize } = request.query;
+const getPagination = (request: NextRequest): { pageNumber: number, pageSize: number } => {
+  const searchParams = request.nextUrl.searchParams;
+  
+  const pageNumberParam = searchParams.get("pageNumber");
+  const pageSizeParam = searchParams.get("pageSize");
 
-  const pagination = {
-    pageNumber: pageNumber ? (Array.isArray(pageNumber) ? parseInt(pageNumber[0]) : parseInt(pageNumber)) : 1,
-    pageSize: pageSize ? (Array.isArray(pageSize) ? parseInt(pageSize[0]) : parseInt(pageSize)) : 1,
-  }
+  const pageNumber = pageNumberParam ? parseInt(pageNumberParam) : 1;
+  const pageSize = pageSizeParam ? parseInt(pageSizeParam) : 10;
 
-  return pagination;
+  return {
+    pageNumber,
+    pageSize
+  };
 }
