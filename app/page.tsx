@@ -5,7 +5,6 @@ import CreateBird from "./components/CreateBird";
 import { Bird } from "./entities/Bird";
 
 export default function Home() {
-
   const onCreateBird = async (bird: Bird) => {
     console.log("onCreateBirdApi");
 
@@ -15,7 +14,7 @@ export default function Home() {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <>
@@ -23,5 +22,5 @@ export default function Home() {
       <h3>Create Bird</h3>
       <CreateBird onCreateBird={onCreateBird}></CreateBird>
     </>
-  )
+  );
 }
