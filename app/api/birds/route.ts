@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import getCurrentUser from "@/app/actions/getCurrentUser";
 import { prisma } from "@/app/lib/prismadb";
+import { ImageKit } from "@/app/external/ImageKit";
+import { BirdCreationQuery } from "@/app/entities/BirdCreationQuery";
 
 export async function POST(request: Request) {
   const currentUser = await getCurrentUser();
@@ -14,13 +16,15 @@ export async function POST(request: Request) {
   console.log(body);
 
   // validate body?!?!?
-  const { name, bornAt } = body;
+  let birdCreationQuery: BirdCreationQuery = { ...body };
+
+  if (birdCreationQuery.images) {
+    const imageKit = new ImageKit();
+    birdCreationQuery = await imageKit.upload(birdCreationQuery);
+  }
 
   const bird = await prisma.bird.create({
-    data: {
-      bornAt,
-      name,
-    },
+    data: birdCreationQuery,
   });
 
   return new NextResponse(JSON.stringify(bird), {

@@ -11,32 +11,32 @@ datasource db {
 }
 
 model User {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String?
-  image String?
-  email String? @unique
-  emailVerified DateTime?
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  image          String?
+  email          String?   @unique
+  emailVerified  DateTime?
   hashedPassword String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   accounts Account[]
 }
 
 // this is needed to make social login work
 model Account {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  userId String @db.ObjectId
-  type String
-  provider String
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
   providerAccountId String
-  refresh_token String? @db.String
-  access_token String? @db.String
-  expires_at Int?
-  token_type String?
-  scope String?
-  id_token String? @db.String
-  session_state String?
+  refresh_token     String? @db.String
+  access_token      String? @db.String
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.String
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -44,16 +44,16 @@ model Account {
 }
 
 model Bird {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  name String
-  bornAt DateTime
-  comments String?
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  bornAt      DateTime
+  name        String?
+  comments    String?
   description String?
-  images String[]
-  parentsId String[]
-  partnerId String?
-  ringId String?
-  sex String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  images      String[]
+  parentsId   String[]
+  partnerId   String?
+  ringId      String?
+  sex         String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
